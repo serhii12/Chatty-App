@@ -30,7 +30,7 @@ export default class ChatBar extends React.Component {
       keyCode,
       target: { value },
     } = event;
-    if (keyCode === 13) {
+    if (keyCode === 13 && value !== '') {
       addMessage(value);
       event.target.value = '';
       return false;
@@ -38,13 +38,12 @@ export default class ChatBar extends React.Component {
   };
 
   render() {
-    const { currentUser } = this.props;
+    const { currentUser, hasName } = this.props;
     return (
       <footer className="chatbar">
         <input
           className="chatbar-username"
-          placeholder="Your Name (Optional)"
-          defaultValue={currentUser}
+          placeholder={hasName ? currentUser : 'Your Name (Optional)'}
           onChange={this.handleInputChange}
           name="username"
         />
