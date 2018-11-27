@@ -1,7 +1,6 @@
 import React from 'react';
 import MessageList from './MessageList';
 import ChatBar from './ChatBar';
-import { generateRandomId } from '../helper';
 
 const SOCKET = new WebSocket('ws://localhost:8081');
 
@@ -15,20 +14,18 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    const { messages } = this.state;
-    SOCKET.onopen = function(event) {
-      SOCKET.send("Here's some text that the server is urgently awaiting!");
+    SOCKET.onmessage = msg => {
+      const { messages } = this.state;
+      const messageToDisplay = JSON.parse(msg.data);
+      const { id, content, username } = messageToDisplay;
+      const newMessage = {
+        id,
+        username,
+        content,
+      };
+      const newMessages = [...messages, newMessage];
+      this.setState({ messages: newMessages });
     };
-
-    // setTimeout(() => {
-    //   const newMessage = {
-    //     id: generateRandomId(),
-    //     username: 'Michelle',
-    //     content: 'Hello there!',
-    //   };
-    //   const newMessages = [...messages, newMessage];
-    //   this.setState({ messages: newMessages });
-    // }, 3000);
   }
 
   addMessage = msg => {
@@ -37,12 +34,10 @@ class App extends React.Component {
       currentUser: { name },
     } = this.state;
     const newMessage = {
-      id: generateRandomId(),
       username: name,
       content: msg,
     };
     SOCKET.send(JSON.stringify(newMessage));
-
     const newMessages = [...messages, newMessage];
     this.setState({ messages: newMessages });
   };
