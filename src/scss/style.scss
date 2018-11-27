@@ -1,3 +1,7 @@
-h1 {
-  color: tomato;
-}
+@import 'partials/variables';
+@import 'partials/normalize';
+@import 'partials/typography';
+@import 'partials/general';
+@import 'partials/chatbar';
+@import 'partials/messageList';
+@import 'partials/nav';
