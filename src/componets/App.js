@@ -3,25 +3,13 @@ import MessageList from './MessageList';
 import ChatBar from './ChatBar';
 import { generateRandomId } from '../helper';
 
-const SOCKET = new WebSocket('ws://localhost:8080');
+const SOCKET = new WebSocket('ws://localhost:8081');
 
 class App extends React.Component {
   constructor(params) {
     super(params);
     this.state = {
-      messages: [
-        {
-          id: generateRandomId(),
-          username: 'Bob',
-          content: 'Has anyone seen my marbles?',
-        },
-        {
-          id: generateRandomId(),
-          username: 'Anonymous',
-          content:
-            'No, I think you lost them. You lost your marbles Bob. You lost them for good.',
-        },
-      ],
+      messages: [],
       currentUser: { name: 'Anonymous', hasName: false },
     };
   }
@@ -53,6 +41,8 @@ class App extends React.Component {
       username: name,
       content: msg,
     };
+    SOCKET.send(JSON.stringify(newMessage));
+
     const newMessages = [...messages, newMessage];
     this.setState({ messages: newMessages });
   };
