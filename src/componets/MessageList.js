@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Message from './Message';
 
 class MessageList extends React.Component {
@@ -7,18 +8,21 @@ class MessageList extends React.Component {
     return (
       <main className="messages">
         {messages.map(msg => (
-          <Message
-            key={msg.username}
-            username={msg.username}
-            content={msg.content}
-          />
+          <Message key={msg.id} username={msg.username} content={msg.content} />
         ))}
-        <div className="message system">
-          Anonymous1 changed their name to nomnom.
-        </div>
+        <div className="message system">SYSTEM</div>
       </main>
     );
   }
 }
 
+MessageList.propTypes = {
+  messages: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      username: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+    }).isRequired
+  ).isRequired,
+};
 export default MessageList;
