@@ -12,9 +12,17 @@ const server = app.listen(PORT, () =>
 );
 
 const wss = new SocketServer({ server });
-
+let counter = 0;
 wss.on('connection', ws => {
   console.log('Client connected');
+  counter += 1;
+  wss.clients.forEach(client => {
+    // Broadcast to everyone else.
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify({ type: 'newUser', counter }));
+    }
+  });
+
   ws.on('message', data => {
     const msg = JSON.parse(data);
     switch (msg.type) {
@@ -46,5 +54,8 @@ wss.on('connection', ws => {
         throw new Error(`Unknown event type ${msg.type}`);
     }
   });
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    counter -= 1;
+    console.log('Client disconnected');
+  });
 });

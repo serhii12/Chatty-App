@@ -29,7 +29,7 @@ MessageList.propTypes = {
   messages: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      username: PropTypes.string.isRequired,
+      username: PropTypes.string,
       content: PropTypes.string.isRequired,
     }).isRequired
   ).isRequired,

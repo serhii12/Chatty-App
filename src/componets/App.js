@@ -10,6 +10,7 @@ class App extends React.Component {
     this.state = {
       messages: [],
       currentUser: { name: 'Anonymous', hasName: false },
+      onlineUsers: 0,
     };
   }
 
@@ -25,10 +26,10 @@ class App extends React.Component {
         content,
       };
       const newNotification = {
+        id,
         type,
         content,
       };
-      console.log('messageToDisplay', messageToDisplay);
       switch (type) {
         case 'incomingMessage': {
           const newMessages = [...messages, newMessage];
@@ -38,6 +39,10 @@ class App extends React.Component {
         case 'incomingNotification': {
           const newNotifications = [...messages, newNotification];
           this.setState({ messages: newNotifications });
+          break;
+        }
+        case 'newUser': {
+          this.setState({ onlineUsers: messageToDisplay.counter });
           break;
         }
         default:
@@ -77,6 +82,7 @@ class App extends React.Component {
   render() {
     const {
       messages,
+      onlineUsers,
       currentUser: { name, hasName },
     } = this.state;
     return (
@@ -85,6 +91,7 @@ class App extends React.Component {
           <a href="/" className="navbar-brand">
             Chatty
           </a>
+          <p>Users Online: {onlineUsers}</p>
         </nav>
         <MessageList messages={messages} />
         <ChatBar
