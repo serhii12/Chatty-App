@@ -19,8 +19,8 @@ wss.on('connection', ws => {
     const msg = JSON.parse(data);
     msg.id = uuidv4();
     wss.clients.forEach(client => {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        console.log(JSON.stringify(msg));
+      // Broadcast to everyone else.
+      if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify(msg));
       }
     });

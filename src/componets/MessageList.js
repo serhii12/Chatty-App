@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Message from './Message';
-import { generateRandomId } from '../helper';
 
 class MessageList extends React.Component {
   render() {
@@ -11,7 +10,7 @@ class MessageList extends React.Component {
         {messages
           ? messages.map(msg => (
               <Message
-                key={generateRandomId()}
+                key={msg.id}
                 username={msg.username}
                 content={msg.content}
               />
@@ -26,6 +25,7 @@ class MessageList extends React.Component {
 MessageList.propTypes = {
   messages: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.string.isRequired,
       username: PropTypes.string.isRequired,
       content: PropTypes.string.isRequired,
     }).isRequired

@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+const WAIT_INTERVAL = 1000;
+
 export default class ChatBar extends React.Component {
   constructor(params) {
     super(params);
     this.state = {
       message: '',
       username: this.props.currentUser,
+      typingTimeout: 0,
     };
   }
 
@@ -15,12 +18,22 @@ export default class ChatBar extends React.Component {
       target: { name, value },
     } = event;
     const inputValue = name === 'username' ? value : value;
-    this.setState({
-      [name]: inputValue,
-    });
-    if (name === 'username' && value !== '') {
+    if (name === 'username' && value.trim() !== '') {
+      const { typingTimeout } = this.state;
       const { setCurrentUser } = this.props;
-      setCurrentUser(value);
+      if (typingTimeout) {
+        clearTimeout(typingTimeout);
+      }
+      this.setState({
+        [name]: inputValue,
+        typingTimeout: setTimeout(() => {
+          setCurrentUser(value.trim());
+        }, 1000),
+      });
+    } else {
+      this.setState({
+        [name]: inputValue,
+      });
     }
   };
 
@@ -37,6 +50,18 @@ export default class ChatBar extends React.Component {
     }
   };
 
+  handleKeyDown = event => {
+    const { setCurrentUser } = this.props;
+    const {
+      keyCode,
+      target: { value },
+    } = event;
+    if (keyCode === 13 && value.trim() !== '') {
+      setCurrentUser(value.trim());
+      return false;
+    }
+  };
+
   render() {
     const { currentUser, hasName } = this.props;
     return (
@@ -46,6 +71,7 @@ export default class ChatBar extends React.Component {
           placeholder={hasName ? currentUser : 'Your Name (Optional)'}
           onChange={this.handleInputChange}
           name="username"
+          onKeyDown={this.handleKeyDown}
         />
         <input
           className="chatbar-message"

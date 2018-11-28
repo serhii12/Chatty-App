@@ -30,7 +30,6 @@ class App extends React.Component {
 
   addMessage = msg => {
     const {
-      messages,
       currentUser: { name },
     } = this.state;
     const newMessage = {
@@ -38,8 +37,6 @@ class App extends React.Component {
       content: msg,
     };
     SOCKET.send(JSON.stringify(newMessage));
-    const newMessages = [...messages, newMessage];
-    this.setState({ messages: newMessages });
   };
 
   setCurrentUser = user => {
