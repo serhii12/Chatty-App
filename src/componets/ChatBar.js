@@ -41,8 +41,8 @@ export default class ChatBar extends React.Component {
       keyCode,
       target: { value },
     } = event;
-    if (keyCode === 13 && value !== '') {
-      addMessage(value);
+    if (keyCode === 13 && value.trim() !== '') {
+      addMessage(value.trim());
       event.target.value = '';
       return false;
     }
@@ -87,4 +87,5 @@ ChatBar.propTypes = {
   currentUser: PropTypes.string.isRequired,
   addMessage: PropTypes.func.isRequired,
   setCurrentUser: PropTypes.func.isRequired,
+  hasName: PropTypes.bool.isRequired,
 };

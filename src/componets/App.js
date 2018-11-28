@@ -17,14 +17,33 @@ class App extends React.Component {
     SOCKET.onmessage = msg => {
       const { messages } = this.state;
       const messageToDisplay = JSON.parse(msg.data);
-      const { id, content, username } = messageToDisplay;
+      const { type, id, content, username } = messageToDisplay;
       const newMessage = {
+        type,
         id,
         username,
         content,
       };
-      const newMessages = [...messages, newMessage];
-      this.setState({ messages: newMessages });
+      const newNotification = {
+        type,
+        content,
+      };
+      console.log('messageToDisplay', messageToDisplay);
+      switch (type) {
+        case 'incomingMessage': {
+          const newMessages = [...messages, newMessage];
+          this.setState({ messages: newMessages });
+          break;
+        }
+        case 'incomingNotification': {
+          const newNotifications = [...messages, newNotification];
+          this.setState({ messages: newNotifications });
+          break;
+        }
+        default:
+          // show an error in the console if the message type is unknown
+          throw new Error(`Unknown event type ${type}`);
+      }
     };
   }
 
@@ -33,6 +52,7 @@ class App extends React.Component {
       currentUser: { name },
     } = this.state;
     const newMessage = {
+      type: 'postMessage',
       username: name,
       content: msg,
     };
@@ -40,6 +60,17 @@ class App extends React.Component {
   };
 
   setCurrentUser = user => {
+    const {
+      currentUser: { name },
+    } = this.state;
+    if (user === name) {
+      return;
+    }
+    const newNotification = {
+      type: 'postNotification',
+      content: `${name} has changed their name to ${user}`,
+    };
+    SOCKET.send(JSON.stringify(newNotification));
     this.setState({ currentUser: { name: user, hasName: true } });
   };
 
