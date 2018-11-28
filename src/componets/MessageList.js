@@ -14,6 +14,7 @@ class MessageList extends React.Component {
               <Message
                 key={msg.id}
                 username={msg.username}
+                color={msg.color}
                 content={msg.content}
               />
             );

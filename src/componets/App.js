@@ -11,6 +11,7 @@ class App extends React.Component {
       messages: [],
       currentUser: { name: 'Anonymous', hasName: false },
       onlineUsers: 0,
+      color: null,
     };
   }
 
@@ -18,12 +19,13 @@ class App extends React.Component {
     SOCKET.onmessage = msg => {
       const { messages } = this.state;
       const messageToDisplay = JSON.parse(msg.data);
-      const { type, id, content, username } = messageToDisplay;
+      const { type, id, content, username, color } = messageToDisplay;
       const newMessage = {
         type,
         id,
         username,
         content,
+        color,
       };
       const newNotification = {
         id,
@@ -42,7 +44,10 @@ class App extends React.Component {
           break;
         }
         case 'newUser': {
-          this.setState({ onlineUsers: messageToDisplay.counter });
+          this.setState({
+            onlineUsers: messageToDisplay.counter,
+            color: messageToDisplay.randomColor,
+          });
           break;
         }
         default:
@@ -55,8 +60,10 @@ class App extends React.Component {
   addMessage = msg => {
     const {
       currentUser: { name },
+      color,
     } = this.state;
     const newMessage = {
+      color,
       type: 'postMessage',
       username: name,
       content: msg,
