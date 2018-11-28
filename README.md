@@ -7,6 +7,15 @@
 - The client-side app communicates with a server via WebSockets for multi-user - real-time updates
 - No persistent database is involved; the focus is on the client-side experience
 
+## Getting Started
+
+1. Install dependencies: `npm i`
+2. Open server folder and install dependencies: `npm i`
+3. Run the server: `node server.js`
+4. Open the main folder and run `npm start`
+5. Visit `http://localhost:8081/`
+6. Enjoy!
+
 ## Dependencies
 
 - react
