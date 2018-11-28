@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const WAIT_INTERVAL = 1000;
-
 export default class ChatBar extends React.Component {
   constructor(params) {
     super(params);
