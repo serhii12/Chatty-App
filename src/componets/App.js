@@ -33,13 +33,11 @@ class App extends React.Component {
       };
       switch (type) {
         case 'incomingMessage': {
-          const newMessages = [...messages, newMessage];
-          this.setState({ messages: newMessages });
+          this.setState({ messages: [...messages, newMessage] });
           break;
         }
         case 'incomingNotification': {
-          const newNotifications = [...messages, newNotification];
-          this.setState({ messages: newNotifications });
+          this.setState({ messages: [...messages, newNotification] });
           break;
         }
         case 'onlineUsers': {

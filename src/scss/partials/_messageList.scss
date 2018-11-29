@@ -1,19 +1,6 @@
-.messages {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  width: 50%;
-  margin: 0 auto;
-}
-
 .message {
   display: flex;
-  align-items: center;
-  width: 100%;
-  border: 2px solid mediumslateblue;
-  padding: 1rem;
-  margin-top: 2rem;
-  border-radius: 15px;
+  padding: 5px;
 }
 
 .message.system {
