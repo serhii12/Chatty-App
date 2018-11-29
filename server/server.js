@@ -31,11 +31,17 @@ const handleMessage = messageData => {
   const msg = JSON.parse(messageData);
   // Create unique id for the msg
   msg.id = uuidv4();
-  if (msg.type === 'postMessage') {
+  const matches = msg.content.match(
+    /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/
+  );
+  if (matches) {
+    // Image stuff
+  } else if (msg.type === 'postMessage') {
     msg.type = 'incomingMessage';
   } else {
     msg.type = 'incomingNotification';
   }
+
   wss.broadcast(msg);
 };
 
@@ -43,27 +49,22 @@ wss.on('connection', ws => {
   console.log('Client connected');
   // Increment counter by one when the user connected
   const newConnection = {
-    type: 'newUser',
+    type: 'onlineUsers',
     counter: wss.clients.size,
-    randomColor: colorArray[getColor()],
   };
+  // broadcast online user to everyone
   wss.broadcast(newConnection);
 
-  // Loop over each client and send updated counter with user and each user randomColor
-  // wss.clients.forEach(client => {
-  //   // Broadcast to everyone else.
-  //   if (client.readyState === WebSocket.OPEN) {
-  //     client.send(
-  //       JSON.stringify({
-  //         type: 'newUser',
-  //         counter,
-  //         randomColor: colorArray[getColor()],
-  //       })
-  //     );
-  //   }
-  // });
+  // assign a color to a user on a connection
+  const newColor = {
+    type: 'newUserColor',
+    randomColor: colorArray[getColor()],
+  };
+  ws.send(JSON.stringify(newColor));
+
   ws.on('message', handleMessage);
   ws.on('close', () => {
+    wss.broadcast(newConnection);
     console.log('Client disconnected');
   });
 });

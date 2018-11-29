@@ -9,15 +9,14 @@ class App extends React.Component {
     super(params);
     this.state = {
       messages: [],
-      currentUser: { name: 'Anonymous', hasName: false },
+      currentUser: { name: 'Anonymous', hasName: false, color: null },
       onlineUsers: null,
-      color: null,
     };
   }
 
   componentDidMount() {
     SOCKET.onmessage = msg => {
-      const { messages } = this.state;
+      const { messages, currentUser } = this.state;
       const dataFromServerMSG = JSON.parse(msg.data);
       const { type, id, content, username, color } = dataFromServerMSG;
       const newMessage = {
@@ -43,10 +42,18 @@ class App extends React.Component {
           this.setState({ messages: newNotifications });
           break;
         }
-        case 'newUser': {
+        case 'onlineUsers': {
           this.setState({
             onlineUsers: dataFromServerMSG.counter,
-            color: dataFromServerMSG.randomColor,
+          });
+          break;
+        }
+        case 'newUserColor': {
+          this.setState({
+            currentUser: {
+              ...currentUser,
+              color: dataFromServerMSG.randomColor,
+            },
           });
           break;
         }
@@ -59,8 +66,7 @@ class App extends React.Component {
 
   addMessage = msg => {
     const {
-      currentUser: { name },
-      color,
+      currentUser: { name, color },
     } = this.state;
     const newMessage = {
       color,
@@ -73,7 +79,7 @@ class App extends React.Component {
 
   setCurrentUser = user => {
     const {
-      currentUser: { name },
+      currentUser: { name, color },
     } = this.state;
     if (user === name) {
       return;
@@ -83,7 +89,7 @@ class App extends React.Component {
       content: `${name} has changed their name to ${user}`,
     };
     SOCKET.send(JSON.stringify(newNotification));
-    this.setState({ currentUser: { name: user, hasName: true } });
+    this.setState({ currentUser: { name: user, hasName: true, color } });
   };
 
   render() {
