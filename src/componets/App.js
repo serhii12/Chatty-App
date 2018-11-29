@@ -10,7 +10,7 @@ class App extends React.Component {
     this.state = {
       messages: [],
       currentUser: { name: 'Anonymous', hasName: false },
-      onlineUsers: 0,
+      onlineUsers: null,
       color: null,
     };
   }
@@ -18,8 +18,8 @@ class App extends React.Component {
   componentDidMount() {
     SOCKET.onmessage = msg => {
       const { messages } = this.state;
-      const messageToDisplay = JSON.parse(msg.data);
-      const { type, id, content, username, color } = messageToDisplay;
+      const dataFromServerMSG = JSON.parse(msg.data);
+      const { type, id, content, username, color } = dataFromServerMSG;
       const newMessage = {
         type,
         id,
@@ -45,8 +45,8 @@ class App extends React.Component {
         }
         case 'newUser': {
           this.setState({
-            onlineUsers: messageToDisplay.counter,
-            color: messageToDisplay.randomColor,
+            onlineUsers: dataFromServerMSG.counter,
+            color: dataFromServerMSG.randomColor,
           });
           break;
         }
