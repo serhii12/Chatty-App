@@ -64,7 +64,11 @@ wss.on('connection', ws => {
 
   ws.on('message', handleMessage);
   ws.on('close', () => {
-    wss.broadcast(newConnection);
+    const userDisconnected = {
+      type: 'onlineUsers',
+      counter: wss.clients.size,
+    };
     console.log('Client disconnected');
+    wss.broadcast(userDisconnected);
   });
 });
