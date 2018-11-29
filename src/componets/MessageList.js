@@ -19,7 +19,9 @@ class MessageList extends React.Component {
               />
             );
           }
-          return <Notification key={msg.id} content={msg.content} />;
+          if (msg.type === 'incomingNotification') {
+            return <Notification key={msg.id} content={msg.content} />;
+          }
         })}
       </main>
     );

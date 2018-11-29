@@ -18,7 +18,15 @@ class App extends React.Component {
     SOCKET.onmessage = msg => {
       const { messages, currentUser } = this.state;
       const dataFromServerMSG = JSON.parse(msg.data);
-      const { type, id, content, username, color } = dataFromServerMSG;
+      const {
+        type,
+        id,
+        content,
+        username,
+        counter,
+        color,
+        randomColor,
+      } = dataFromServerMSG;
       const newMessage = {
         type,
         id,
@@ -42,7 +50,7 @@ class App extends React.Component {
         }
         case 'onlineUsers': {
           this.setState({
-            onlineUsers: dataFromServerMSG.counter,
+            onlineUsers: counter,
           });
           break;
         }
@@ -50,7 +58,7 @@ class App extends React.Component {
           this.setState({
             currentUser: {
               ...currentUser,
-              color: dataFromServerMSG.randomColor,
+              color: randomColor,
             },
           });
           break;

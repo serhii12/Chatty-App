@@ -31,12 +31,8 @@ const handleMessage = messageData => {
   const msg = JSON.parse(messageData);
   // Create unique id for the msg
   msg.id = uuidv4();
-  const matches = msg.content.match(
-    /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/
-  );
-  if (matches) {
-    // Image stuff
-  } else if (msg.type === 'postMessage') {
+
+  if (msg.type === 'postMessage') {
     msg.type = 'incomingMessage';
   } else {
     msg.type = 'incomingNotification';
