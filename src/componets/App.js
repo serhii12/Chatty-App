@@ -2,7 +2,7 @@ import React from 'react';
 import MessageList from './MessageList';
 import ChatBar from './ChatBar';
 
-const SOCKET = new WebSocket('ws://localhost:8081');
+const SOCKET = new WebSocket('ws://localhost:3001');
 
 class App extends React.Component {
   constructor(params) {

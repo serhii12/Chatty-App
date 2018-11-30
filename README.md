@@ -13,7 +13,7 @@
 2. Open server folder and install dependencies: `npm i`
 3. Run the server: `node server.js`
 4. Open the main folder and run `npm start`
-5. Visit `http://localhost:8081/`
+5. Visit `http://localhost:8080/`
 6. Enjoy!
 
 ## Dependencies
