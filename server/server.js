@@ -5,7 +5,7 @@ const uuidv4 = require('uuid/v4');
 const SocketServer = WebSocket.Server;
 const colorArray = require('./colors');
 
-const PORT = 8081;
+const PORT = 3001;
 const app = express();
 
 const getColor = () => Math.floor(Math.random() * colorArray.length - 1) + 1;
